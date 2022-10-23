@@ -1,7 +1,15 @@
 const NFTCollection = artifacts.require("NFTCollection");
 const { expect } = require('chai');
+const { ethers } = require('ethers');
+const truffleAssert = require('truffle-assertions');
 // Import utilities from Test Helpers
-const { BN, expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
+const {
+  BN,           // Big Number support
+  constants,    // Common constants, like the zero address and largest integers
+  expectEvent,  // Assertions for emitted events
+  expectRevert, // Assertions for transactions that should fail
+} = require('@openzeppelin/test-helpers');
+
 
 
 /*
@@ -18,7 +26,7 @@ contract("NFTCollection", function ([owner, other]) {
 
   beforeEach(async function () {
     // Deploy a new Counter contract for each test
-    this.collection = await NFTCollection.new( baseURI, tokenName, tokenSymbol, contractURI );
+    this.collection = await NFTCollection.new(baseURI, tokenName, tokenSymbol, contractURI);
   });
 
   it("is deployed", async function () {
@@ -30,6 +38,21 @@ contract("NFTCollection", function ([owner, other]) {
     const _owner = await this.collection.owner.call({ from: other });
     expect(_owner).to.equal(owner);
   })
+
+  it("can mint an NFT", async function () {
+    const initBalance = await this.collection.balanceOf(other);
+
+    receipt = await this.collection.mintNFTs(1, { from: other, value: ethers.utils.parseUnits("2", 'ether') });
+
+    const finalBalance = await this.collection.balanceOf(other);
+    expect(finalBalance).to.be.bignumber.equal((initBalance+1));
+    expectEvent(receipt, 'Transfer', {
+      from: constants.ZERO_ADDRESS,
+      to: other,
+    });
+  })
+
+
 
   // it("allows only owner to increase counter", async function () {
   //   const initial = await this.counter.retrieve();
