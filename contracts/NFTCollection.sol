@@ -13,11 +13,11 @@ contract NFTCollection is ERC721Enumerable, Ownable {
 
     Counters.Counter private _tokenIds;
     // The max number of NFTs in the collection
-    uint public constant MAX_SUPPLY = 10;
+    uint public MAX_SUPPLY; // = 10;
     // The mint price for the collection
-    uint public constant PRICE = 0.00001 ether;
+    uint public PRICE; // = 0.00001 ether;
     // The max number of mints per wallet
-    uint public constant MAX_PER_MINT = 5;
+    uint public MAX_PER_MINT; // = 5;
 
     string public baseTokenURI;
     string private _contractURI;
@@ -26,10 +26,16 @@ contract NFTCollection is ERC721Enumerable, Ownable {
         string memory baseURI,
         string memory name,
         string memory symbol,
-        string memory __contractURI
+        string memory __contractURI,
+        uint max_supply,
+        uint price,
+        uint max_per_mint
     ) ERC721(name, symbol) {
         setBaseURI(baseURI);
         setContractURI(__contractURI);
+        MAX_SUPPLY = max_supply;
+        PRICE = price;
+        MAX_PER_MINT = max_per_mint;
     }
 
     function _baseURI() internal view virtual override returns (string memory) {

@@ -26,7 +26,7 @@ contract("NFTCollection", function ([owner, other]) {
 
   beforeEach(async function () {
     // Deploy a new Counter contract for each test
-    this.collection = await NFTCollection.new(baseURI, tokenName, tokenSymbol, contractURI);
+    this.collection = await NFTCollection.new(baseURI, tokenName, tokenSymbol, contractURI, 10, ethers.utils.parseUnits("0.02", 'ether'), 5); // 1000000000000000
   });
 
   it("is deployed", async function () {

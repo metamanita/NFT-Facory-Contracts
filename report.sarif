@@ -1,0 +1,1195 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Slither",
+          "informationUri": "https://github.com/crytic/slither",
+          "version": "0.9.0",
+          "rules": [
+            {
+              "id": "1-1-divide-before-multiply",
+              "name": "divide-before-multiply",
+              "properties": {
+                "precision": "high",
+                "security-severity": "4.0"
+              },
+              "shortDescription": {
+                "text": "Divide before multiply"
+              },
+              "help": {
+                "text": "Consider ordering multiplication before division."
+              }
+            },
+            {
+              "id": "1-1-unused-return",
+              "name": "unused-return",
+              "properties": {
+                "precision": "high",
+                "security-severity": "4.0"
+              },
+              "shortDescription": {
+                "text": "Unused return"
+              },
+              "help": {
+                "text": "Ensure that all the return values of the function calls are used."
+              }
+            },
+            {
+              "id": "2-0-shadowing-local",
+              "name": "shadowing-local",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "3.0"
+              },
+              "shortDescription": {
+                "text": "Local variable shadowing"
+              },
+              "help": {
+                "text": "Rename the local variables that shadow another component."
+              }
+            },
+            {
+              "id": "2-1-calls-loop",
+              "name": "calls-loop",
+              "properties": {
+                "precision": "high",
+                "security-severity": "3.0"
+              },
+              "shortDescription": {
+                "text": "Calls inside a loop"
+              },
+              "help": {
+                "text": "Favor [pull over push](https://github.com/ethereum/wiki/wiki/Safety#favor-pull-over-push-for-external-calls) strategy for external calls."
+              }
+            },
+            {
+              "id": "2-0-variable-scope",
+              "name": "variable-scope",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "3.0"
+              },
+              "shortDescription": {
+                "text": "Pre-declaration usage of local variables"
+              },
+              "help": {
+                "text": "Move all variable declarations prior to any usage of the variable, and ensure that reaching a variable declaration does not depend on some conditional if it is used unconditionally."
+              }
+            },
+            {
+              "id": "3-0-assembly",
+              "name": "assembly",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Assembly usage"
+              },
+              "help": {
+                "text": "Do not use `evm` assembly."
+              }
+            },
+            {
+              "id": "3-0-pragma",
+              "name": "pragma",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Different pragma directives are used"
+              },
+              "help": {
+                "text": "Use one Solidity version."
+              }
+            },
+            {
+              "id": "3-1-costly-loop",
+              "name": "costly-loop",
+              "properties": {
+                "precision": "high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Costly operations inside a loop"
+              },
+              "help": {
+                "text": "Use a local variable to hold the loop computation result."
+              }
+            },
+            {
+              "id": "3-0-solc-version",
+              "name": "solc-version",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Incorrect versions of Solidity"
+              },
+              "help": {
+                "text": "\nDeploy with any of the following Solidity versions:\n- 0.5.16 - 0.5.17\n- 0.6.11 - 0.6.12\n- 0.7.5 - 0.7.6\n- 0.8.16\n\nThe recommendations take into account:\n- Risks related to recent releases\n- Risks of complex code generation changes\n- Risks of new language features\n- Risks of known bugs\n\nUse a simple pragma version that allows any of these versions.\nConsider using the latest version of Solidity for testing."
+              }
+            },
+            {
+              "id": "3-0-low-level-calls",
+              "name": "low-level-calls",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Low-level calls"
+              },
+              "help": {
+                "text": "Avoid low-level calls. Check the call success. If the call is meant for a contract, check for code existence."
+              }
+            },
+            {
+              "id": "3-0-naming-convention",
+              "name": "naming-convention",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Conformance to Solidity naming conventions"
+              },
+              "help": {
+                "text": "Follow the Solidity [naming convention](https://solidity.readthedocs.io/en/v0.4.25/style-guide.html#naming-conventions)."
+              }
+            },
+            {
+              "id": "3-1-similar-names",
+              "name": "similar-names",
+              "properties": {
+                "precision": "high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Variable names too similar"
+              },
+              "help": {
+                "text": "Prevent variables from having similar names."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "1-1-divide-before-multiply",
+          "message": {
+            "text": "Base64.encode(bytes) (@openzeppelin/contracts/utils/Base64.sol#20-91) performs a multiplication on the result of a division:\n\t- result = new string(4 * ((data.length + 2) / 3)) (@openzeppelin/contracts/utils/Base64.sol#36)\n",
+            "markdown": "[Base64.encode(bytes)](node_modules/@openzeppelin/contracts/utils/Base64.sol#L20-L91) performs a multiplication on the result of a division:\n\t- [result = new string(4 * ((data.length + 2) / 3))](node_modules/@openzeppelin/contracts/utils/Base64.sol#L36)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Base64.sol"
+                },
+                "region": {
+                  "startLine": 20,
+                  "endLine": 91
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "f4ab10f8542c36f1ffc0a1c3809228f81297d4daaac0a642aaba816e12db499d"
+          }
+        },
+        {
+          "ruleId": "1-1-unused-return",
+          "message": {
+            "text": "ERC721._checkOnERC721Received(address,address,uint256,bytes) (@openzeppelin/contracts/token/ERC721/ERC721.sol#394-416) ignores return value by IERC721Receiver(to).onERC721Received(_msgSender(),from,tokenId,data) (@openzeppelin/contracts/token/ERC721/ERC721.sol#401-412)\n",
+            "markdown": "[ERC721._checkOnERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L394-L416) ignores return value by [IERC721Receiver(to).onERC721Received(_msgSender(),from,tokenId,data)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L401-L412)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 394,
+                  "endLine": 416
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "a418b0f43168366b9927c1fbde043aa5cc322aa48757712f125783528294efa6"
+          }
+        },
+        {
+          "ruleId": "2-0-shadowing-local",
+          "message": {
+            "text": "NFTCollection.constructor(string,string,string,string).symbol (NFTCollection.sol#28) shadows:\n\t- ERC721.symbol() (@openzeppelin/contracts/token/ERC721/ERC721.sol#86-88) (function)\n\t- IERC721Metadata.symbol() (@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#21) (function)\n",
+            "markdown": "[NFTCollection.constructor(string,string,string,string).symbol](contracts/NFTCollection.sol#L28) shadows:\n\t- [ERC721.symbol()](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L86-L88) (function)\n\t- [IERC721Metadata.symbol()](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#L21) (function)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/NFTCollection.sol"
+                },
+                "region": {
+                  "startLine": 28,
+                  "endLine": 28
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "221e5e95a7537e12525cdd88c1cca7448e8cff98db39b33b646655b94974ded1"
+          }
+        },
+        {
+          "ruleId": "2-0-shadowing-local",
+          "message": {
+            "text": "NFTCollection.constructor(string,string,string,string).name (NFTCollection.sol#27) shadows:\n\t- ERC721.name() (@openzeppelin/contracts/token/ERC721/ERC721.sol#79-81) (function)\n\t- IERC721Metadata.name() (@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#16) (function)\n",
+            "markdown": "[NFTCollection.constructor(string,string,string,string).name](contracts/NFTCollection.sol#L27) shadows:\n\t- [ERC721.name()](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L79-L81) (function)\n\t- [IERC721Metadata.name()](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#L16) (function)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/NFTCollection.sol"
+                },
+                "region": {
+                  "startLine": 27,
+                  "endLine": 27
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "8b6bfc7ceb5fe80776a36719615bc821ab5fae461364af6ea0dbc93b9b7c7e12"
+          }
+        },
+        {
+          "ruleId": "2-0-shadowing-local",
+          "message": {
+            "text": "NFTCollection.tokensOfOwner(address)._owner (NFTCollection.sol#80) shadows:\n\t- Ownable._owner (@openzeppelin/contracts/access/Ownable.sol#21) (state variable)\n",
+            "markdown": "[NFTCollection.tokensOfOwner(address)._owner](contracts/NFTCollection.sol#L80) shadows:\n\t- [Ownable._owner](node_modules/@openzeppelin/contracts/access/Ownable.sol#L21) (state variable)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/NFTCollection.sol"
+                },
+                "region": {
+                  "startLine": 80,
+                  "endLine": 80
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "ae4f418e0c94b8f21aa505c13980cadcdf62d93b34059bc4793ada585a122d4d"
+          }
+        },
+        {
+          "ruleId": "2-1-calls-loop",
+          "message": {
+            "text": "ERC721._checkOnERC721Received(address,address,uint256,bytes) (@openzeppelin/contracts/token/ERC721/ERC721.sol#394-416) has external calls inside a loop: IERC721Receiver(to).onERC721Received(_msgSender(),from,tokenId,data) (@openzeppelin/contracts/token/ERC721/ERC721.sol#401-412)\n",
+            "markdown": "[ERC721._checkOnERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L394-L416) has external calls inside a loop: [IERC721Receiver(to).onERC721Received(_msgSender(),from,tokenId,data)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L401-L412)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 394,
+                  "endLine": 416
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "50ea70158ce1c8636f6b03f1c2be983dfdb552b4a24b7bef1383f79ba3d51661"
+          }
+        },
+        {
+          "ruleId": "2-0-variable-scope",
+          "message": {
+            "text": "Variable 'ERC721._checkOnERC721Received(address,address,uint256,bytes).retval (@openzeppelin/contracts/token/ERC721/ERC721.sol#401)' in ERC721._checkOnERC721Received(address,address,uint256,bytes) (@openzeppelin/contracts/token/ERC721/ERC721.sol#394-416) potentially used before declaration: retval == IERC721Receiver.onERC721Received.selector (@openzeppelin/contracts/token/ERC721/ERC721.sol#402)\n",
+            "markdown": "Variable '[ERC721._checkOnERC721Received(address,address,uint256,bytes).retval](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L401)' in [ERC721._checkOnERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L394-L416) potentially used before declaration: [retval == IERC721Receiver.onERC721Received.selector](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L402)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 401,
+                  "endLine": 401
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "3d8a5442371fd274a02a2dfe1a4beaac0fc0a4cf89f94f1c17209bd611b6f994"
+          }
+        },
+        {
+          "ruleId": "2-0-variable-scope",
+          "message": {
+            "text": "Variable 'ERC721._checkOnERC721Received(address,address,uint256,bytes).reason (@openzeppelin/contracts/token/ERC721/ERC721.sol#403)' in ERC721._checkOnERC721Received(address,address,uint256,bytes) (@openzeppelin/contracts/token/ERC721/ERC721.sol#394-416) potentially used before declaration: reason.length == 0 (@openzeppelin/contracts/token/ERC721/ERC721.sol#404)\n",
+            "markdown": "Variable '[ERC721._checkOnERC721Received(address,address,uint256,bytes).reason](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L403)' in [ERC721._checkOnERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L394-L416) potentially used before declaration: [reason.length == 0](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L404)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 403,
+                  "endLine": 403
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "6fb9cdc166c2217ff02b6106b20b0dae255331f0950857b45bac1cb78b261d5c"
+          }
+        },
+        {
+          "ruleId": "2-0-variable-scope",
+          "message": {
+            "text": "Variable 'ERC721._checkOnERC721Received(address,address,uint256,bytes).reason (@openzeppelin/contracts/token/ERC721/ERC721.sol#403)' in ERC721._checkOnERC721Received(address,address,uint256,bytes) (@openzeppelin/contracts/token/ERC721/ERC721.sol#394-416) potentially used before declaration: revert(uint256,uint256)(32 + reason,mload(uint256)(reason)) (@openzeppelin/contracts/token/ERC721/ERC721.sol#409)\n",
+            "markdown": "Variable '[ERC721._checkOnERC721Received(address,address,uint256,bytes).reason](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L403)' in [ERC721._checkOnERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L394-L416) potentially used before declaration: [revert(uint256,uint256)(32 + reason,mload(uint256)(reason))](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L409)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 403,
+                  "endLine": 403
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "e00ee16301f9e212a02ecf381bd345daf2b9c7e8b1adaff74afbdda75a9852c9"
+          }
+        },
+        {
+          "ruleId": "3-0-assembly",
+          "message": {
+            "text": "ERC721._checkOnERC721Received(address,address,uint256,bytes) (@openzeppelin/contracts/token/ERC721/ERC721.sol#394-416) uses assembly\n\t- INLINE ASM (@openzeppelin/contracts/token/ERC721/ERC721.sol#408-410)\n",
+            "markdown": "[ERC721._checkOnERC721Received(address,address,uint256,bytes)](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L394-L416) uses assembly\n\t- [INLINE ASM](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L408-L410)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 394,
+                  "endLine": 416
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "3cbdc8f76af06fb57dd578267a0b3372dce1a2a9c594b55247a901404a6599c5"
+          }
+        },
+        {
+          "ruleId": "3-0-assembly",
+          "message": {
+            "text": "Base64.encode(bytes) (@openzeppelin/contracts/utils/Base64.sol#20-91) uses assembly\n\t- INLINE ASM (@openzeppelin/contracts/utils/Base64.sol#39-88)\n",
+            "markdown": "[Base64.encode(bytes)](node_modules/@openzeppelin/contracts/utils/Base64.sol#L20-L91) uses assembly\n\t- [INLINE ASM](node_modules/@openzeppelin/contracts/utils/Base64.sol#L39-L88)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Base64.sol"
+                },
+                "region": {
+                  "startLine": 20,
+                  "endLine": 91
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "4c3f7a19654f21f1f0c93583dd397ef6f117462d63aabaff56a830ec5297b13a"
+          }
+        },
+        {
+          "ruleId": "3-0-assembly",
+          "message": {
+            "text": "Address.verifyCallResult(bool,bytes,string) (@openzeppelin/contracts/utils/Address.sol#201-221) uses assembly\n\t- INLINE ASM (@openzeppelin/contracts/utils/Address.sol#213-216)\n",
+            "markdown": "[Address.verifyCallResult(bool,bytes,string)](node_modules/@openzeppelin/contracts/utils/Address.sol#L201-L221) uses assembly\n\t- [INLINE ASM](node_modules/@openzeppelin/contracts/utils/Address.sol#L213-L216)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 201,
+                  "endLine": 221
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "547ebd4f02cbb10228ecd79ea372b271f1fa5b1d832dcfd86013a4fb281b4b0f"
+          }
+        },
+        {
+          "ruleId": "3-0-pragma",
+          "message": {
+            "text": "Different versions of Solidity are used:\n\t- Version used: ['^0.8.0', '^0.8.1', '^0.8.13']\n\t- ^0.8.0 (@openzeppelin/contracts/utils/Context.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/utils/math/SafeMath.sol#4)\n\t- ^0.8.13 (NFTCollection.sol#2)\n\t- ^0.8.0 (@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/utils/Counters.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/access/Ownable.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/utils/Base64.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/token/ERC721/IERC721.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/utils/introspection/IERC165.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/utils/Strings.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/token/ERC721/ERC721.sol#4)\n\t- ^0.8.1 (@openzeppelin/contracts/utils/Address.sol#4)\n\t- ^0.8.0 (@openzeppelin/contracts/utils/introspection/ERC165.sol#4)\n",
+            "markdown": "Different versions of Solidity are used:\n\t- Version used: ['^0.8.0', '^0.8.1', '^0.8.13']\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Context.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol#L4)\n\t- [^0.8.13](contracts/NFTCollection.sol#L2)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Counters.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/access/Ownable.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Base64.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/Strings.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L4)\n\t- [^0.8.1](node_modules/@openzeppelin/contracts/utils/Address.sol#L4)\n\t- [^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#L4)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Context.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "499718d45138f8326106fb09b2c361f4a4e03406256609ca1af0895112a75ebe"
+          }
+        },
+        {
+          "ruleId": "3-1-costly-loop",
+          "message": {
+            "text": "ERC721Enumerable._removeTokenFromOwnerEnumeration(address,uint256) (@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#119-137) has costly operations inside a loop:\n\t- delete _ownedTokensIndex[tokenId] (@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#135)\n",
+            "markdown": "[ERC721Enumerable._removeTokenFromOwnerEnumeration(address,uint256)](node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#L119-L137) has costly operations inside a loop:\n\t- [delete _ownedTokensIndex[tokenId]](node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#L135)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol"
+                },
+                "region": {
+                  "startLine": 119,
+                  "endLine": 137
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "3bc222c6876a9b2adb78def12a788fe0b511b654ec2be47718f0ee39f8fa6cf1"
+          }
+        },
+        {
+          "ruleId": "3-1-costly-loop",
+          "message": {
+            "text": "ERC721Enumerable._removeTokenFromAllTokensEnumeration(uint256) (@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#144-162) has costly operations inside a loop:\n\t- _allTokens.pop() (@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#161)\n",
+            "markdown": "[ERC721Enumerable._removeTokenFromAllTokensEnumeration(uint256)](node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#L144-L162) has costly operations inside a loop:\n\t- [_allTokens.pop()](node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#L161)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol"
+                },
+                "region": {
+                  "startLine": 144,
+                  "endLine": 162
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "6e1662462bae842b378d339a3f886fc8fed92c7e5b286607a9fd135d4315ac2c"
+          }
+        },
+        {
+          "ruleId": "3-1-costly-loop",
+          "message": {
+            "text": "ERC721Enumerable._removeTokenFromAllTokensEnumeration(uint256) (@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#144-162) has costly operations inside a loop:\n\t- delete _allTokensIndex[tokenId] (@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#160)\n",
+            "markdown": "[ERC721Enumerable._removeTokenFromAllTokensEnumeration(uint256)](node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#L144-L162) has costly operations inside a loop:\n\t- [delete _allTokensIndex[tokenId]](node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#L160)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol"
+                },
+                "region": {
+                  "startLine": 144,
+                  "endLine": 162
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "7b2fcef9a86fbb5861a21c0a3215ed61dd0ac06495bd50475b68d84febd90cd6"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/utils/Base64.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/Base64.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Base64.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "0418c3e9a5ca875aee274e0e992a6f131d6cfd71527e4e6c0c4b795afeff42b0"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/utils/introspection/ERC165.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "27f9aadbd4ee799ce6605f80400fd5a6eed58b2f5584df578618664ca886a789"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "3cfe4e3e8598dc1fcb16600d5aa9baaf9753e293bf1f06a9e1c2402055566aa7"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "4cca83dd46371aabb99555d80dadff4ab1fd501decea165ac716fe8943839ceb"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/utils/introspection/IERC165.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "51361c17a131bcca16c9dac715f6d5035698dd8a4e1e47ef96e7b87e0061563f"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/token/ERC721/IERC721.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "73e78f4a1a4cb46239cba6dedd438c0b426c750a9230fb5d3e5f075acd30c6e5"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/utils/Strings.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/Strings.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Strings.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "82e2378352d3027174f9b107298520a73f18b66637fb9a7e80eaf6c52cf0a439"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "9e37f1073f1045a073eb9b87a08f0cb94aece87bfb76dcd8ff90b0edabc33cb2"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.1 (@openzeppelin/contracts/utils/Address.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.1](node_modules/@openzeppelin/contracts/utils/Address.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "9e64d4abf32c048e1ab83610f8efb16eab8dfccbdc41c60ef72e9bae3d38dffc"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/utils/Counters.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/Counters.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Counters.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "a8b55d2e025c5854aab971507764642eae9bb90689b79e8f89366034c7c0b439"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "c0fef292c7833f4e6391b85e23772541912810fefaed58f404e21f775052a1d5"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/utils/math/SafeMath.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "cd56a548f757d082cfc83d8677c4a731a88e8fba52adb21095003dbf60983bb8"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.13 (NFTCollection.sol#2) allows old versions\n",
+            "markdown": "Pragma version[^0.8.13](contracts/NFTCollection.sol#L2) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/NFTCollection.sol"
+                },
+                "region": {
+                  "startLine": 2,
+                  "endLine": 2
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "cde4305e3dd8fbb7b3a26ba41a76eecf546c0da73cbd4bc9e4eb544ea3fa50b3"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/token/ERC721/ERC721.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "f175ac20d6f46a4b1273ffd0d005fac26eecc51b33dc225c5f4ee4791a0d673b"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/access/Ownable.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/access/Ownable.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/access/Ownable.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "f83f716ad714000f71328c6d8f603ed050a673bbe4d2927a1f72aa0755b4a5eb"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version^0.8.0 (@openzeppelin/contracts/utils/Context.sol#4) allows old versions\n",
+            "markdown": "Pragma version[^0.8.0](node_modules/@openzeppelin/contracts/utils/Context.sol#L4) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Context.sol"
+                },
+                "region": {
+                  "startLine": 4,
+                  "endLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "fd40cfed07df0548f667345dc30b708908d7e31a36d6f0f8d9186d225992e1fc"
+          }
+        },
+        {
+          "ruleId": "3-0-low-level-calls",
+          "message": {
+            "text": "Low level call in Address.functionDelegateCall(address,bytes,string) (@openzeppelin/contracts/utils/Address.sol#184-193):\n\t- (success,returndata) = target.delegatecall(data) (@openzeppelin/contracts/utils/Address.sol#191)\n",
+            "markdown": "Low level call in [Address.functionDelegateCall(address,bytes,string)](node_modules/@openzeppelin/contracts/utils/Address.sol#L184-L193):\n\t- [(success,returndata) = target.delegatecall(data)](node_modules/@openzeppelin/contracts/utils/Address.sol#L191)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 184,
+                  "endLine": 193
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "29ca7735ce7574f66b12352dbc734eb1a9a029d0c9102ba2f96540252a6e1a20"
+          }
+        },
+        {
+          "ruleId": "3-0-low-level-calls",
+          "message": {
+            "text": "Low level call in Address.sendValue(address,uint256) (@openzeppelin/contracts/utils/Address.sol#60-65):\n\t- (success) = recipient.call{value: amount}() (@openzeppelin/contracts/utils/Address.sol#63)\n",
+            "markdown": "Low level call in [Address.sendValue(address,uint256)](node_modules/@openzeppelin/contracts/utils/Address.sol#L60-L65):\n\t- [(success) = recipient.call{value: amount}()](node_modules/@openzeppelin/contracts/utils/Address.sol#L63)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 60,
+                  "endLine": 65
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "6ba9e562f940e9ba688623920986a643f45dfb6a8a6a8842b4874a927279d50c"
+          }
+        },
+        {
+          "ruleId": "3-0-low-level-calls",
+          "message": {
+            "text": "Low level call in Address.functionCallWithValue(address,bytes,uint256,string) (@openzeppelin/contracts/utils/Address.sol#128-139):\n\t- (success,returndata) = target.call{value: value}(data) (@openzeppelin/contracts/utils/Address.sol#137)\n",
+            "markdown": "Low level call in [Address.functionCallWithValue(address,bytes,uint256,string)](node_modules/@openzeppelin/contracts/utils/Address.sol#L128-L139):\n\t- [(success,returndata) = target.call{value: value}(data)](node_modules/@openzeppelin/contracts/utils/Address.sol#L137)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 128,
+                  "endLine": 139
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "7b94aad418802bc811626310473050e9ad7ed4c84b603f31ad23310602af33cd"
+          }
+        },
+        {
+          "ruleId": "3-0-low-level-calls",
+          "message": {
+            "text": "Low level call in NFTCollection.withdraw() (NFTCollection.sol#95-101):\n\t- (success) = (msg.sender).call{value: balance}() (NFTCollection.sol#99)\n",
+            "markdown": "Low level call in [NFTCollection.withdraw()](contracts/NFTCollection.sol#L95-L101):\n\t- [(success) = (msg.sender).call{value: balance}()](contracts/NFTCollection.sol#L99)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/NFTCollection.sol"
+                },
+                "region": {
+                  "startLine": 95,
+                  "endLine": 101
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "958e2e3bec20a1422b562de6b3ff3ab998461c0a8b7ac9ef6de5f2eaec8e6826"
+          }
+        },
+        {
+          "ruleId": "3-0-low-level-calls",
+          "message": {
+            "text": "Low level call in Address.functionStaticCall(address,bytes,string) (@openzeppelin/contracts/utils/Address.sol#157-166):\n\t- (success,returndata) = target.staticcall(data) (@openzeppelin/contracts/utils/Address.sol#164)\n",
+            "markdown": "Low level call in [Address.functionStaticCall(address,bytes,string)](node_modules/@openzeppelin/contracts/utils/Address.sol#L157-L166):\n\t- [(success,returndata) = target.staticcall(data)](node_modules/@openzeppelin/contracts/utils/Address.sol#L164)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "node_modules/@openzeppelin/contracts/utils/Address.sol"
+                },
+                "region": {
+                  "startLine": 157,
+                  "endLine": 166
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "d78e429cab311b044eb445adb2ead975a0241beb243262ffb95466f70602824e"
+          }
+        },
+        {
+          "ruleId": "3-0-naming-convention",
+          "message": {
+            "text": "Parameter NFTCollection.mintNFTs(uint256)._count (NFTCollection.sol#52) is not in mixedCase\n",
+            "markdown": "Parameter [NFTCollection.mintNFTs(uint256)._count](contracts/NFTCollection.sol#L52) is not in mixedCase\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/NFTCollection.sol"
+                },
+                "region": {
+                  "startLine": 52,
+                  "endLine": 52
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "21c1b4203589a4efba9dc0d882176f3ed1583058b11c4f2ae22b3a8abefa846c"
+          }
+        },
+        {
+          "ruleId": "3-0-naming-convention",
+          "message": {
+            "text": "Parameter NFTCollection.tokensOfOwner(address)._owner (NFTCollection.sol#80) is not in mixedCase\n",
+            "markdown": "Parameter [NFTCollection.tokensOfOwner(address)._owner](contracts/NFTCollection.sol#L80) is not in mixedCase\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/NFTCollection.sol"
+                },
+                "region": {
+                  "startLine": 80,
+                  "endLine": 80
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "3b5127bef650a70ee41680b4e7885e418e9e79076595dd8c55c450d6108ef83c"
+          }
+        },
+        {
+          "ruleId": "3-0-naming-convention",
+          "message": {
+            "text": "Parameter NFTCollection.setBaseURI(string)._baseTokenURI (NFTCollection.sol#39) is not in mixedCase\n",
+            "markdown": "Parameter [NFTCollection.setBaseURI(string)._baseTokenURI](contracts/NFTCollection.sol#L39) is not in mixedCase\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/NFTCollection.sol"
+                },
+                "region": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "505b4f4b7bb341f9c53c813b33591de2b42c848a7f11577a6cc7e999332d51e5"
+          }
+        },
+        {
+          "ruleId": "3-0-naming-convention",
+          "message": {
+            "text": "Parameter NFTCollection.reserveNFTs(uint256)._count (NFTCollection.sol#104) is not in mixedCase\n",
+            "markdown": "Parameter [NFTCollection.reserveNFTs(uint256)._count](contracts/NFTCollection.sol#L104) is not in mixedCase\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/NFTCollection.sol"
+                },
+                "region": {
+                  "startLine": 104,
+                  "endLine": 104
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "d0abd90c720a5af44f0292ab6839c650bfe09b29b18b09d9ede5c045e3895d3e"
+          }
+        },
+        {
+          "ruleId": "3-1-similar-names",
+          "message": {
+            "text": "Variable NFTCollection._contractURI (NFTCollection.sol#23) is too similar to NFTCollection.setContractURI(string).contractURI_ (NFTCollection.sol#43)\n",
+            "markdown": "Variable [NFTCollection._contractURI](contracts/NFTCollection.sol#L23) is too similar to [NFTCollection.setContractURI(string).contractURI_](contracts/NFTCollection.sol#L43)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "contracts/NFTCollection.sol"
+                },
+                "region": {
+                  "startLine": 23,
+                  "endLine": 23
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "853be4a78fbd8bb9537c96ab4d099776a95b37f5b2e825e2eace0b2339b9e53f"
+          }
+        }
+      ]
+    }
+  ]
+}

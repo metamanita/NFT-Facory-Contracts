@@ -18,6 +18,20 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
+    evmos: {
+      provider: () => new HDWalletProvider(mnemonic, `https://evmos-json-rpc.stakely.io`),
+      network_id: 9001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
+    evmosTestnet: {
+      provider: () => new HDWalletProvider(mnemonic, `https://eth.bd.evmos.dev:8545`),
+      network_id: 9000,
+      confirmations: 2,
+      timeoutBlocks: 2000,
+      skipDryRun: true
+    },
     dashboard: {
       port: 24012
     }
